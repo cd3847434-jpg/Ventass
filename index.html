@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0757bd">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Talita Cumi">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo-talita-cumi.jpeg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Comercial Talita Cumi</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="logo-talita-cumi.jpeg" alt="Comercial Talita Cumi">
+        <div>
+          <strong>Comercial Talita Cumi</strong>
+          <small>¡Los precios más bajos!</small>
+        </div>
+      </div>
+      <button class="icon-btn" id="menuBtn" aria-label="Menú">☰</button>
+    </header>
+
+    <main>
+      <!-- INICIO -->
+      <section class="view active" id="view-home">
+        <div class="profile-mini">
+          <div class="avatar-wrap">
+            <img id="homeAvatar" class="avatar" src="" alt="Foto de Kevin">
+            <span class="avatar-fallback">K</span>
+          </div>
+          <div>
+            <h2>Kevin Antonio Rodriguez</h2>
+            <p>Vendedor</p>
+          </div>
+          <button class="gear" onclick="showView('profile')">⚙</button>
+        </div>
+
+        <div class="action-grid">
+          <button class="action-card blue" onclick="showView('sale')"><span>🛒</span><b>Registrar venta</b></button>
+          <button class="action-card green" onclick="showView('products')"><span>📦</span><b>Productos</b></button>
+          <button class="action-card purple" onclick="showView('sales')"><span>📄</span><b>Ventas del día</b></button>
+          <button class="action-card orange" onclick="showView('summary')"><span>📊</span><b>Resumen</b></button>
+        </div>
+
+        <div class="stats-card">
+          <div><span>📈</span><div><small>Ventas hoy</small><strong id="homeTotal">L. 0.00</strong></div><time id="today"></time></div>
+          <hr>
+          <div><span>📦</span><div><small>Productos vendidos</small><strong id="homeItems">0</strong></div></div>
+        </div>
+      </section>
+
+      <!-- REGISTRAR VENTA -->
+      <section class="view" id="view-sale">
+        <div class="section-head"><button class="back" onclick="showView('home')">‹</button><h1>Registrar venta</h1></div>
+        <form id="saleForm" class="card form-card">
+          <label>Producto</label>
+          <div class="search-select">
+            <input id="saleProductSearch" placeholder="Buscar producto..." autocomplete="off">
+            <select id="saleProduct"></select>
+          </div>
+          <label>Cantidad</label>
+          <div class="qty"><button type="button" id="minus">−</button><input id="quantity" type="number" min="1" value="1"><button type="button" id="plus">+</button></div>
+          <label>Precio unitario (L.)</label>
+          <div class="money"><span>L.</span><input id="unitPrice" type="number" min="0" step="0.01" value="0"></div>
+          <label>Método de pago</label>
+          <div class="payments">
+            <label><input type="radio" name="payment" value="Efectivo" checked> Efectivo</label>
+            <label><input type="radio" name="payment" value="Transferencia"> Transferencia</label>
+            <label><input type="radio" name="payment" value="Tarjeta"> Tarjeta</label>
+          </div>
+          <div class="sale-total"><span>Total</span><strong id="saleTotal">L. 0.00</strong></div>
+          <button class="primary-btn" type="submit">🛒 Registrar venta</button>
+        </form>
+      </section>
+
+      <!-- VENTAS -->
+      <section class="view" id="view-sales">
+        <div class="section-head"><button class="back" onclick="showView('home')">‹</button><h1>Ventas del día</h1></div>
+        <div class="card">
+          <div class="date-row">📅 <span id="salesDate"></span></div>
+          <div id="salesList" class="sales-list"></div>
+          <div class="day-total"><span>💰 Total del día</span><strong id="salesTotal">L. 0.00</strong></div>
+        </div>
+      </section>
+
+      <!-- PRODUCTOS -->
+      <section class="view" id="view-products">
+        <div class="section-head"><button class="back" onclick="showView('home')">‹</button><h1>Productos</h1><button class="add-product" onclick="openProductModal()">＋</button></div>
+        <div class="card">
+          <input id="productSearch" class="big-search" placeholder="🔎 Buscar producto...">
+          <div class="chips">
+            <button class="chip active" data-cat="Todos">Todos</button>
+            <button class="chip" data-cat="Bebidas">Bebidas</button>
+            <button class="chip" data-cat="Snacks">Snacks</button>
+            <button class="chip" data-cat="Aseo">Aseo</button>
+          </div>
+          <div id="productList" class="product-list"></div>
+        </div>
+      </section>
+
+      <!-- RESUMEN -->
+      <section class="view" id="view-summary">
+        <div class="section-head"><button class="back" onclick="showView('home')">‹</button><h1>Resumen</h1></div>
+        <div class="summary-grid">
+          <div class="metric green"><small>Total vendido</small><strong id="sumTotal">L. 0.00</strong></div>
+          <div class="metric blue"><small>Productos vendidos</small><strong id="sumItems">0</strong></div>
+          <div class="metric purple"><small>Ventas</small><strong id="sumSales">0</strong></div>
+          <div class="metric orange"><small>Promedio por venta</small><strong id="sumAvg">L. 0.00</strong></div>
+        </div>
+        <div class="card">
+          <h3>Productos más vendidos</h3>
+          <div id="topProducts"></div>
+        </div>
+      </section>
+
+      <!-- PERFIL -->
+      <section class="view" id="view-profile">
+        <div class="section-head"><button class="back" onclick="showView('home')">‹</button><h1>Mi perfil</h1></div>
+        <div class="card profile-card">
+          <div class="profile-photo">
+            <img id="profileAvatar" src="" alt="Foto de perfil">
+            <span id="profileFallback">K</span>
+            <label class="camera">📷<input id="photoInput" type="file" accept="image/*" hidden></label>
+          </div>
+          <h2>Kevin Antonio Rodriguez</h2>
+          <p>Vendedor</p>
+          <label class="primary-btn photo-label">📷 Cambiar foto de perfil<input id="photoInput2" type="file" accept="image/*" hidden></label>
+          <div class="info-row">👤 <span><small>Nombre</small><b>Kevin Antonio Rodriguez</b></span></div>
+          <div class="info-row">👥 <span><small>Rol</small><b>Vendedor</b></span></div>
+          <div class="info-row">📞 <span><small>Teléfono</small><b>+504 9XX-XXXX</b></span></div>
+          <div class="info-row">✉️ <span><small>Correo</small><b>kevin.rodriguez@email.com</b></span></div>
+          <button class="danger-btn" onclick="logout()">↪ Cerrar sesión</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav active" data-view="home">⌂<span>Inicio</span></button>
+      <button class="nav" data-view="sales">▤<span>Ventas</span></button>
+      <button class="nav" data-view="products">◇<span>Productos</span></button>
+      <button class="nav" data-view="summary">▥<span>Resumen</span></button>
+    </nav>
+  </div>
+
+  <div id="productModal" class="modal hidden">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeProductModal()">×</button>
+      <h2>Agregar producto</h2>
+      <input id="newName" placeholder="Nombre del producto">
+      <input id="newPrice" type="number" step="0.01" placeholder="Precio (L.)">
+      <input id="newStock" type="number" min="0" placeholder="Stock">
+      <select id="newCategory"><option>Bebidas</option><option>Snacks</option><option>Aseo</option><option>Otros</option></select>
+      <button class="primary-btn" onclick="addProduct()">Agregar producto</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
