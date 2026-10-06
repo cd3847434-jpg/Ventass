@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a3fb8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Talita Cumi">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="logo-talita-cumi.jpeg">
+<link rel="apple-touch-icon" href="logo-talita-cumi.jpeg">
+<style>
+:root{--blue:#0a3fb8;--blue2:#2563eb;--sun:#fff200;--ink:#0a2260;--mut:#5d6f93;--bg:#f7f8ff;--line:#e1e7f7;--red:#d4201f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35}
+button,input{font:inherit;color:inherit}button{border:0;cursor:pointer;background:none}
+.hidden{display:none!important}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:12px 16px calc(12px);padding-top:max(12px,env(safe-area-inset-top));background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.top>img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#fff}
+.top strong{display:block;font-size:17px}.top small{opacity:.85}
+.mini-avatar{margin-left:auto;width:42px;height:42px;border-radius:50%;overflow:hidden;background:#fff3;border:2px solid #fff8;display:grid;place-items:center;padding:0}
+.av-img{width:100%;height:100%;object-fit:cover;display:none}.av-ini{font-size:18px;color:#fff}
+.has-photo .av-img{display:block}.has-photo .av-ini{display:none}
+.view{display:none;max-width:640px;margin:auto;padding:16px 16px 110px}.view.active{display:block}
+.hello{margin:4px 2px 12px;color:var(--mut)}.hello b{color:var(--ink)}
+.hero{background:var(--ink);color:#fff;border-radius:24px;padding:22px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:var(--sun);opacity:.95}
+.hero small{opacity:.75}.hero strong{display:block;font-size:44px;letter-spacing:-1px;margin:4px 0 8px;position:relative;z-index:1}
+.hero span{font-size:13px;opacity:.8;position:relative;z-index:1}.hero b{color:var(--sun)}
+.big-cta{width:100%;margin:14px 0;padding:18px;border-radius:18px;background:var(--sun);color:#3a2d00;font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px #ffd40050}
+.big-cta i{font-style:normal;font-size:26px;line-height:1}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tiles button{background:#fff;border-radius:16px;padding:14px;text-align:left;border:1px solid var(--line)}
+.tiles b{display:block;font-size:15px}.tiles small{color:var(--mut)}
+.sub{font-size:15px;margin:22px 4px 8px}
+.card{background:#fff;border-radius:20px;padding:16px;border:1px solid var(--line);margin-bottom:14px}
+.head{display:flex;align-items:center;gap:8px;margin-bottom:12px}.head h1{font-size:22px;margin:0}
+.back{font-size:34px;line-height:1;color:var(--blue);padding:0 8px 4px 0}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 6px}
+input{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:none}
+input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px #1677e022}
+.card input+input,.card .note+input{margin-top:8px}
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:10px}
+.qty{display:grid;grid-template-columns:42px 1fr 42px;gap:4px}.qty button{background:#eaf2fd;color:var(--blue);border-radius:10px;font-size:22px;font-weight:700}.qty input{text-align:center;padding:14px 4px}
+.pay{display:flex;gap:8px}.pay button{flex:1;padding:12px 4px;border-radius:12px;background:#eef3fa;font-weight:600;font-size:14px}.pay .on{background:var(--blue);color:#fff}
+.seg{margin-bottom:12px}
+.total{display:flex;justify-content:space-between;align-items:center;margin:16px 0 12px}.total strong{font-size:28px;color:var(--blue)}
+.total.card{margin:14px 0 0}
+.btn{width:100%;padding:15px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;font-size:16px;margin-top:14px}
+.btn.ghost{background:#eaf2fd;color:var(--blue);margin-top:8px}
+.link{display:block;margin:10px auto 0;color:var(--blue);font-weight:600;font-size:14px;padding:6px}.link.red{color:var(--red)}
+.note{font-size:13px;color:var(--mut);margin:6px 0 10px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.row>div{flex:1;min-width:0}.row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.row small{color:var(--mut)}
+.row strong{color:var(--blue);white-space:nowrap}.row .x{color:var(--red);font-size:20px;padding:4px 6px}
+.empty{text-align:center;color:var(--mut);padding:28px 12px;background:#fff;border:1px dashed #cbd7e8;border-radius:16px}
+.daynav{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px}
+.daynav button{font-size:28px;color:var(--blue);padding:6px 18px}.daynav span{font-weight:700}
+.search{margin-bottom:10px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metrics div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.metrics div:first-child{grid-column:1/-1;background:var(--blue);color:#fff}
+.metrics small{opacity:.75;display:block}.metrics strong{font-size:24px}
+.bar{margin:8px 0}.bar div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.bar i{display:block;height:8px;border-radius:6px;background:#e8eff9;margin-top:5px;overflow:hidden}.bar i s{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),var(--sun));border-radius:6px}
+.photo{position:relative;width:110px;height:110px;margin:6px auto 0;border-radius:50%;background:var(--blue2);display:grid;place-items:center}
+.photo .av-img,.photo .av-ini{border-radius:50%;position:absolute;inset:0}.photo .av-ini{display:grid;place-items:center;font-size:44px}
+.photo .av-img{display:none}.has-photo .av-img{display:block}.has-photo .av-ini{display:none}
+.cam{position:absolute;right:-4px;bottom:-4px;width:38px;height:38px;border-radius:50%;background:var(--sun);display:grid;place-items:center;margin:0;font-size:18px;cursor:pointer;box-shadow:0 2px 8px #0003;z-index:2}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;background:#fff;border-top:1px solid var(--line);padding:6px 6px max(6px,env(safe-area-inset-bottom))}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--mut);padding:6px}
+.tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabs .on{color:var(--blue);font-weight:700}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:30px;opacity:0;pointer-events:none;transition:.25s;z-index:30;font-weight:600}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,var(--blue),var(--ink));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px}
+.lock img{width:96px;height:96px;border-radius:50%;background:#fff}.lock h2{margin:6px 0 0}.lock p{margin:0 0 8px;opacity:.8}
+.lock input{max-width:320px;text-align:center;color:var(--ink)}.lock .btn{max-width:320px;background:var(--sun);color:#3a2d00}.lock small{color:#ffb4b4;min-height:18px}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* colores del logo + animaciones */
+.top{border-bottom:4px solid var(--sun)}
+.hero{background:var(--sun);color:var(--ink);border:3px solid var(--blue)}
+.hero::after{width:190px;height:120px;right:-60px;top:-24px;background:none;border:6px solid var(--blue);opacity:.25}
+.hero::before{content:"";position:absolute;right:-20px;bottom:-40px;width:120px;height:80px;border-radius:50%;border:5px solid var(--red);opacity:.25}
+.hero small{opacity:.85;font-weight:600}.hero strong{color:var(--blue)}.hero span{opacity:1}.hero b{color:var(--red)}
+.big-cta{background:var(--red);color:#fff;border:3px solid var(--sun);animation:pulse 2.6s infinite}
+.tiles button{border-bottom:4px solid var(--sun)}.tiles button:nth-child(2){border-bottom-color:var(--blue)}.tiles button:nth-child(3){border-bottom-color:var(--red)}
+.bar i s{background:linear-gradient(90deg,var(--blue2),var(--red))}
+.tabs button{position:relative}.tabs .on::after{content:"";position:absolute;top:-6px;width:28px;height:4px;border-radius:0 0 4px 4px;background:var(--red);animation:pop .3s}
+textarea{width:100%;padding:14px;border:1.5px solid var(--line);border-radius:12px;resize:vertical;font:inherit;color:inherit;outline:none;background:#fff}
+textarea:focus{border-color:var(--blue2);box-shadow:0 0 0 3px #2563eb22}
+.pay.wrap{flex-wrap:wrap}.pay.wrap button{flex:1 1 44%}
+.note-row b{white-space:normal}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 8px 20px #d4201f55}50%{box-shadow:0 8px 26px #d4201f99,0 0 0 8px #fff20077}}
+@keyframes floaty{50%{transform:translateY(-8px)}}
+@keyframes burst{to{transform:translate(var(--x),260px) rotate(var(--r));opacity:0}}
+.view.active{animation:up .35s ease}
+.list>*{animation:up .4s ease both}.list>*:nth-child(2){animation-delay:.06s}.list>*:nth-child(3){animation-delay:.12s}.list>*:nth-child(4){animation-delay:.18s}.list>*:nth-child(n+5){animation-delay:.24s}
+.tiles button,.btn,.big-cta,.row,.pay button{transition:transform .12s}
+.tiles button:active,.btn:active,.big-cta:active,.row:active,.pay button:active{transform:scale(.96)}
+.lock img{animation:floaty 3s ease-in-out infinite}
+.cf{position:fixed;top:55%;width:9px;height:14px;border-radius:2px;z-index:60;pointer-events:none;animation:burst 1.1s ease-out forwards}
+</style>
+<title>Comercial Talita Cumi</title>
+</head>
+<body>
+<div id="lock" class="lock hidden">
+  <img src="logo-talita-cumi.jpeg" alt="">
+  <h2>Comercial Talita Cumi</h2>
+  <p>Escribe tu contraseña para entrar</p>
+  <input id="lockPass" type="password" placeholder="Contraseña" autocomplete="current-password">
+  <button class="btn" id="lockBtn">Entrar</button>
+  <small id="lockErr"></small>
+</div>
+
+<header class="top">
+  <img src="logo-talita-cumi.jpeg" alt="Logo">
+  <div><strong>Comercial Talita Cumi</strong><small>¡Los precios más bajos!</small></div>
+  <button class="mini-avatar" onclick="go('profile')" aria-label="Mi perfil"><img class="av-img" alt=""><b class="av-ini">K</b></button>
+</header>
+
+<main>
+  <section class="view active" id="v-home">
+    <p class="hello">Hola, <b id="hName"></b></p>
+    <div class="hero">
+      <small>Ventas de hoy</small>
+      <strong id="hTotal">L. 0.00</strong>
+      <span id="hSub"></span>
+    </div>
+    <button class="big-cta" onclick="go('sale')"><i>＋</i> Registrar venta</button>
+    <div class="tiles">
+      <button onclick="go('sales')"><b>Ventas del día</b><small>Ver y borrar</small></button>
+      <button onclick="go('products')"><b>Productos</b><small>Lo que has vendido</small></button>
+      <button onclick="go('summary')"><b>Resumen</b><small>Hoy, semana, mes</small></button>
+      <button onclick="go('notes')"><b>Notas</b><small id="tNotes">Quebrado, pendientes</small></button>
+    </div>
+    <h3 class="sub">Últimas ventas</h3>
+    <div id="hRecent" class="list"></div>
+  </section>
+
+  <section class="view" id="v-sale">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Registrar venta</h1></div>
+    <form id="saleForm" class="card">
+      <label for="sName">¿Qué vendiste?</label>
+      <input id="sName" list="names" placeholder="Ej: Refri de 8 pies" autocomplete="off" required>
+      <datalist id="names"></datalist>
+      <div class="two">
+        <div><label for="sPrice">Precio (L.)</label><input id="sPrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="500" required></div>
+        <div><label>Cantidad</label><div class="qty"><button type="button" id="minus">−</button><input id="sQty" type="number" inputmode="numeric" min="1" value="1"><button type="button" id="plus">+</button></div></div>
+      </div>
+      <label>Pago</label>
+      <div class="pay" id="pay">
+        <button type="button" class="on" data-v="Efectivo">Efectivo</button>
+        <button type="button" data-v="Transferencia">Transferencia</button>
+        <button type="button" data-v="Tarjeta">Tarjeta</button>
+      </div>
+      <div class="total"><span>Total</span><strong id="sTotal">L. 0.00</strong></div>
+      <button class="btn" type="submit">Guardar venta</button>
+    </form>
+  </section>
+
+  <section class="view" id="v-sales">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Ventas del día</h1></div>
+    <div class="daynav"><button onclick="moveDay(-1)">‹</button><span id="dLabel"></span><button onclick="moveDay(1)">›</button></div>
+    <div id="sList" class="list"></div>
+    <div class="total card"><span>Total del día</span><strong id="sDayTotal">L. 0.00</strong></div>
+  </section>
+
+  <section class="view" id="v-products">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Productos</h1></div>
+    <input id="pSearch" class="search" placeholder="Buscar producto...">
+    <div id="pList" class="list"></div>
+  </section>
+
+  <section class="view" id="v-summary">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Resumen</h1></div>
+    <div class="pay seg" id="range"><button class="on" data-v="day">Hoy</button><button data-v="week">7 días</button><button data-v="month">Mes</button></div>
+    <div class="metrics">
+      <div><small>Total vendido</small><strong id="mTotal">L. 0.00</strong></div>
+      <div><small>Ventas</small><strong id="mSales">0</strong></div>
+      <div><small>Productos</small><strong id="mItems">0</strong></div>
+      <div><small>Promedio</small><strong id="mAvg">L. 0.00</strong></div>
+    </div>
+    <h3 class="sub">Lo que más vendes</h3>
+    <div id="top" class="card"></div>
+  </section>
+
+  <section class="view" id="v-notes">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Notas</h1></div>
+    <form id="noteForm" class="card">
+      <label for="nText">¿Qué pasó?</label>
+      <textarea id="nText" rows="3" placeholder="Ej: Hoy quebré un vaso en la bodega" required></textarea>
+      <div class="pay wrap" id="nType" style="margin-top:10px">
+        <button type="button" class="on" data-v="💥 Quebrado">💥 Quebrado</button>
+        <button type="button" data-v="📦 Falta producto">📦 Falta producto</button>
+        <button type="button" data-v="⏰ Recordatorio">⏰ Recordar</button>
+        <button type="button" data-v="📝 Otra">📝 Otra</button>
+      </div>
+      <button class="btn" type="submit">Guardar nota</button>
+    </form>
+    <div id="nList" class="list"></div>
+  </section>
+
+  <section class="view" id="v-profile">
+    <div class="head"><button class="back" onclick="go('home')">‹</button><h1>Mi perfil</h1></div>
+    <div class="card">
+      <div class="photo"><img class="av-img" alt=""><b class="av-ini">K</b>
+        <label class="cam" aria-label="Cambiar foto">📷<input id="photo" type="file" accept="image/*" hidden></label></div>
+      <button class="link" id="rmPhoto">Quitar foto</button>
+      <label for="pfName">Nombre</label><input id="pfName">
+      <label for="pfRole">Cargo</label><input id="pfRole">
+      <label for="pfPhone">Teléfono</label><input id="pfPhone" type="tel" placeholder="+504 ...">
+      <label for="pfMail">Correo</label><input id="pfMail" type="email">
+      <button class="btn" id="saveProfile">Guardar datos</button>
+    </div>
+    <div class="card">
+      <h3 id="passTitle">Contraseña (opcional)</h3>
+      <p class="note" id="passNote">Si la creas, la app te la pedirá cada vez que la abras.</p>
+      <input id="np1" type="password" placeholder="Nueva contraseña" autocomplete="new-password">
+      <input id="np2" type="password" placeholder="Repite la contraseña" autocomplete="new-password">
+      <button class="btn" id="savePass">Guardar contraseña</button>
+      <button class="btn ghost" id="lockNow">Bloquear app ahora</button>
+      <button class="link red" id="rmPass">Quitar contraseña</button>
+      <p class="note">Se guarda solo en este teléfono. Si la olvidas, borra los datos del sitio (se pierden las ventas).</p>
+    </div>
+    <div class="card">
+      <h3>Copia de seguridad</h3>
+      <p class="note">Guarda tus ventas y notas en un archivo, por si cambias de teléfono o se borran los datos.</p>
+      <button class="btn" id="bkOut">Descargar copia</button>
+      <button class="btn ghost" id="bkIn">Restaurar copia</button>
+      <input id="bkFile" type="file" accept=".json,application/json" hidden>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
+  <button data-v="sales"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg>Ventas</button>
+  <button data-v="products"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10"/></svg>Productos</button>
+  <button data-v="summary"><svg viewBox="0 0 24 24"><path d="M5 21V10M12 21V3M19 21v-7"/></svg>Resumen</button>
+</nav>
+<div id="toast" class="toast"></div>
+<script>
+const KEY="talita_v2";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"L. "+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pad=n=>String(n).padStart(2,"0");
+const dk=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const fmtDay=k=>{const[y,m,d]=k.split("-");return new Date(y,m-1,d).toLocaleDateString("es-HN",{weekday:"long",day:"numeric",month:"short"})};
+
+let db=load();db.notes=db.notes||[];
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY));if(d)return d}catch(e){}
+  let sales=[];try{sales=JSON.parse(localStorage.getItem("talita_sales_v1")||"[]")}catch(e){}
+  return{sales,profile:{name:"Kevin Antonio Rodriguez",role:"Vendedor",phone:"",mail:"",photo:localStorage.getItem("talita_photo_v1")||"",pass:""}};
+}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){toast("No hay espacio para guardar")}};
+let toastT;function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("show"),2200)}
+
+/* navegación */
+let day=dk(new Date()),range="day",pay="Efectivo";
+function go(v){
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  $("v-"+v).classList.add("active");
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  if(v==="sales")day=dk(new Date());
+  render();scrollTo(0,0);
+  if(v==="sale")setTimeout(()=>$("sName").focus(),50);
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+/* helpers */
+const byDay=k=>db.sales.filter(s=>s.date===k);
+const sum=a=>a.reduce((t,s)=>t+s.total,0), cnt=a=>a.reduce((t,s)=>t+s.qty,0);
+const saleRow=(s,del)=>`<div class="row"><div><b>${esc(s.product)}</b><small>${s.time} · ${s.qty} × ${money(s.price)} · ${esc(s.payment)}</small></div><strong>${money(s.total)}</strong>${del?`<button class="x" onclick="delSale(${s.id})" aria-label="Borrar">🗑</button>`:""}</div>`;
+const empty=t=>`<div class="empty">${t}</div>`;
+
+function render(){
+  const p=db.profile,t=byDay(dk(new Date()));
+  $("hName").textContent=p.name.split(" ")[0]||"vendedor";
+  countTo($("hTotal"),sum(t));
+  $("hSub").innerHTML=`<b>${t.length}</b> ${t.length===1?"venta":"ventas"} · <b>${cnt(t)}</b> ${cnt(t)===1?"producto":"productos"}`;
+  $("hRecent").innerHTML=t.length?t.slice(0,3).map(s=>saleRow(s)).join(""):empty("Aún no vendes nada hoy.<br>Toca <b>Registrar venta</b> para empezar.");
+  // ventas del día
+  const ds=byDay(day);
+  $("dLabel").textContent=day===dk(new Date())?"Hoy":fmtDay(day);
+  $("sList").innerHTML=ds.length?ds.map(s=>saleRow(s,1)).join(""):empty("No hay ventas este día.");
+  $("sDayTotal").textContent=money(sum(ds));
+  // productos (salen solos de las ventas)
+  const q=$("pSearch").value.toLowerCase(),m={};
+  db.sales.forEach(s=>{const k=s.product.toLowerCase(),o=m[k]||(m[k]={name:s.product,qty:0,total:0,price:s.price});o.qty+=s.qty;o.total+=s.total});
+  const ps=Object.values(m).filter(x=>x.name.toLowerCase().includes(q)).sort((a,b)=>b.qty-a.qty);
+  $("pList").innerHTML=ps.length?ps.map(x=>`<button class="row" style="text-align:left;width:100%" onclick="reuse('${esc(x.name).replace(/'/g,"\\'")}',${x.price})"><div><b>${esc(x.name)}</b><small>${x.qty} vendidos · último precio ${money(x.price)}</small></div><strong>${money(x.total)}</strong></button>`).join(""):empty(db.sales.length?"No se encontró ese producto.":"Todavía no hay productos.<br>Aparecen solos cuando registras una venta.");
+  $("names").innerHTML=Object.values(m).map(x=>`<option value="${esc(x.name)}">`).join("");
+  const tn=db.notes.filter(n=>n.date===dk(new Date())).length;
+  $("tNotes").textContent=tn?tn+(tn===1?" nota hoy":" notas hoy"):"Quebrado, pendientes";
+  $("nList").innerHTML=db.notes.length?db.notes.map(n=>`<div class="row note-row"><div><small>${n.type} · ${n.date===dk(new Date())?"Hoy":fmtDay(n.date)}, ${n.time}</small><b>${esc(n.text)}</b></div><button class="x" onclick="delNote(${n.id})" aria-label="Borrar">🗑</button></div>`).join(""):empty("Sin notas todavía.<br>Anota aquí si algo se quebró o falta.");
+  renderSummary();renderProfile();
+}
+function renderSummary(){
+  const now=new Date(),from=new Date(now);
+  if(range==="week")from.setDate(now.getDate()-6);
+  if(range==="month")from.setDate(1);
+  const a=db.sales.filter(s=>range==="day"?s.date===dk(now):s.date>=dk(from)&&s.date<=dk(now));
+  $("mTotal").textContent=money(sum(a));$("mSales").textContent=a.length;$("mItems").textContent=cnt(a);$("mAvg").textContent=money(a.length?sum(a)/a.length:0);
+  const c={};a.forEach(s=>c[s.product]=(c[s.product]||0)+s.qty);
+  const top=Object.entries(c).sort((x,y)=>y[1]-x[1]).slice(0,5),mx=top[0]?top[0][1]:1;
+  $("top").innerHTML=top.length?top.map(([n,v])=>`<div class="bar"><div><span>${esc(n)}</span><b>${v}</b></div><i><s style="width:${v/mx*100}%"></s></i></div>`).join(""):'<span class="note">Registra ventas para ver qué se vende más.</span>';
+}
+function moveDay(n){const[y,m,d]=day.split("-");const x=new Date(y,m-1,+d+n);if(dk(x)>dk(new Date()))return;day=dk(x);render()}
+function reuse(name,price){go("sale");$("sName").value=name;$("sPrice").value=price;calc()}
+function delSale(id){if(!confirm("¿Borrar esta venta?"))return;db.sales=db.sales.filter(s=>s.id!==id);save();render()}
+
+/* animaciones */
+let shown=0;
+function countTo(el,to){
+  if(to===shown||matchMedia("(prefers-reduced-motion:reduce)").matches){el.textContent=money(to);shown=to;return}
+  const from=shown,t0=performance.now();shown=to;
+  (function f(n){const k=Math.min(1,(n-t0)/600);el.textContent=money(from+(to-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(t0);
+}
+function confetti(){const cs=["#fff200","#0a3fb8","#d4201f"];for(let i=0;i<30;i++){const e=document.createElement("i");e.className="cf";e.style.cssText=`left:${40+Math.random()*20}%;background:${cs[i%3]};--x:${(Math.random()-.5)*340}px;--r:${Math.random()*720}deg;animation-delay:${Math.random()*.12}s`;document.body.appendChild(e);setTimeout(()=>e.remove(),1500)}}
+
+/* notas */
+let nType="💥 Quebrado";
+document.querySelectorAll("#nType button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#nType button").forEach(x=>x.classList.remove("on"));b.classList.add("on");nType=b.dataset.v});
+$("noteForm").onsubmit=e=>{e.preventDefault();const text=$("nText").value.trim();if(!text)return;
+  db.notes.unshift({id:Date.now(),date:dk(new Date()),time:new Date().toLocaleTimeString("es-HN",{hour:"2-digit",minute:"2-digit"}),text,type:nType});
+  save();e.target.reset();render();toast("Nota guardada ✓")};
+function delNote(id){if(!confirm("¿Borrar esta nota?"))return;db.notes=db.notes.filter(n=>n.id!==id);save();render()}
+
+/* registrar venta */
+const calc=()=>$("sTotal").textContent=money((+$("sQty").value||0)*(+$("sPrice").value||0));
+$("sQty").oninput=$("sPrice").oninput=calc;
+$("minus").onclick=()=>{$("sQty").value=Math.max(1,(+$("sQty").value||1)-1);calc()};
+$("plus").onclick=()=>{$("sQty").value=(+$("sQty").value||0)+1;calc()};
+$("sName").oninput=function(){ // si ya vendiste ese producto, sugiere el último precio
+  const l=db.sales.find(s=>s.product.toLowerCase()===this.value.trim().toLowerCase());
+  if(l&&!$("sPrice").value){$("sPrice").value=l.price;calc()}
+};
+document.querySelectorAll("#pay button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#pay button").forEach(x=>x.classList.remove("on"));b.classList.add("on");pay=b.dataset.v});
+$("saleForm").onsubmit=e=>{
+  e.preventDefault();
+  const product=$("sName").value.trim(),qty=Math.max(1,+$("sQty").value||1),price=+$("sPrice").value;
+  if(!product||!(price>=0)||$("sPrice").value==="")return toast("Escribe el producto y el precio");
+  db.sales.unshift({id:Date.now(),date:dk(new Date()),time:new Date().toLocaleTimeString("es-HN",{hour:"2-digit",minute:"2-digit"}),product,qty,price,total:qty*price,payment:pay});
+  save();e.target.reset();$("sQty").value=1;calc();toast("Venta guardada ✓");confetti();go("home");
+};
+document.querySelectorAll("#range button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#range button").forEach(x=>x.classList.remove("on"));b.classList.add("on");range=b.dataset.v;renderSummary()});
+$("pSearch").oninput=render;
+
+/* perfil */
+function renderProfile(){
+  const p=db.profile;
+  document.querySelectorAll(".av-ini").forEach(e=>e.textContent=(p.name||"K").trim()[0].toUpperCase());
+  document.querySelectorAll(".av-img").forEach(i=>{if(p.photo)i.src=p.photo});
+  document.body.classList.toggle("has-photo",!!p.photo);
+  $("rmPhoto").classList.toggle("hidden",!p.photo);
+  $("rmPass").classList.toggle("hidden",!p.pass);$("lockNow").classList.toggle("hidden",!p.pass);
+  $("passTitle").textContent=p.pass?"Contraseña activada 🔒":"Contraseña (opcional)";
+  if(document.activeElement.tagName!=="INPUT"){$("pfName").value=p.name;$("pfRole").value=p.role;$("pfPhone").value=p.phone;$("pfMail").value=p.mail}
+}
+$("saveProfile").onclick=()=>{const n=$("pfName").value.trim();if(!n)return toast("Escribe tu nombre");Object.assign(db.profile,{name:n,role:$("pfRole").value.trim(),phone:$("pfPhone").value.trim(),mail:$("pfMail").value.trim()});save();render();toast("Datos guardados ✓")};
+$("photo").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(im.width,im.height),S=300;c.width=c.height=S;
+    c.getContext("2d").drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,S,S);db.profile.photo=c.toDataURL("image/jpeg",.85);save();render();toast("Foto actualizada ✓")};im.src=r.result};
+  r.readAsDataURL(f);e.target.value="";
+};
+$("rmPhoto").onclick=()=>{db.profile.photo="";save();render()};
+
+/* contraseña (se guarda como hash SHA-256 en este teléfono) */
+async function hash(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("talita:"+t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+$("savePass").onclick=async()=>{
+  const a=$("np1").value;if(a.length<4)return toast("Mínimo 4 caracteres");if(a!==$("np2").value)return toast("Las contraseñas no coinciden");
+  if(db.profile.pass&&!(await hash(prompt("Contraseña actual:")||"")===db.profile.pass))return toast("Contraseña actual incorrecta");
+  db.profile.pass=await hash(a);save();$("np1").value=$("np2").value="";render();toast("Contraseña guardada ✓");
+};
+$("rmPass").onclick=async()=>{if(await hash(prompt("Escribe tu contraseña para quitarla:")||"")!==db.profile.pass)return toast("Contraseña incorrecta");db.profile.pass="";save();render();toast("Contraseña quitada")};
+function lock(){if(!db.profile.pass)return;$("lock").classList.remove("hidden");$("lockPass").value="";$("lockErr").textContent=""}
+$("lockNow").onclick=lock;
+$("lockBtn").onclick=async()=>{if(await hash($("lockPass").value)===db.profile.pass){$("lock").classList.add("hidden");go("home")}else $("lockErr").textContent="Contraseña incorrecta"};
+$("lockPass").onkeydown=e=>{if(e.key==="Enter")$("lockBtn").click()};
+
+/* copia de seguridad */
+$("bkOut").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:"application/json"}));a.download="talita-cumi-copia-"+dk(new Date())+".json";a.click();toast("Copia descargada ✓")};
+$("bkIn").onclick=()=>$("bkFile").click();
+$("bkFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.sales)||!d.profile)throw 0;if(!confirm("Esto reemplaza los datos actuales. ¿Continuar?"))return;db=d;db.notes=db.notes||[];save();render();toast("Copia restaurada ✓")}catch(x){toast("Ese archivo no es una copia válida")}};r.readAsText(f);e.target.value=""};
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+
+render();lock();
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
